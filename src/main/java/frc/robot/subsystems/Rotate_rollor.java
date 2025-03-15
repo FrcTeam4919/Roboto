@@ -58,7 +58,7 @@ public void rotate_down(){
 @Override
    public void periodic() {
      // This method will be called once per scheduler run
-     SmartDashboard.putNumber("wrist motor",TiltR.getDistance());
+     //SmartDashboard.putNumber("wrist motor",TiltR.getDistance());
    }
  
    @Override

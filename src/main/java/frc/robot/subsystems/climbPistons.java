@@ -7,9 +7,9 @@ import frc.robot.Robot;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 
 public class climbPistons extends SubsystemBase{
-    private DoubleSolenoid accendFR = Robot.use.makeDoubleSolenoid(0, 1);
-   private DoubleSolenoid accendFL = Robot.use.makeDoubleSolenoid( 2, 3);
-   private DoubleSolenoid accendBR = Robot.use.makeDoubleSolenoid( 14, 15);
+  private DoubleSolenoid accendFR = Robot.use.makeDoubleSolenoid(0, 1);
+  private DoubleSolenoid accendFL = Robot.use.makeDoubleSolenoid( 2, 3);
+  private DoubleSolenoid accendBR = Robot.use.makeDoubleSolenoid( 14, 15);
   
   
 public climbPistons(){}
