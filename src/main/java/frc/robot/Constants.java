@@ -116,8 +116,10 @@ public final class Constants {
     public static final int LCB = 5;
     public static final int RCA = 6;
     public static final int RCB = 7;
+  } 
+  public static class pnumaticconstants{
+    public static final int center=1;
   }
-
   // Vendor Dep URLS
   // nav-x: "https://storage.googleapis.com/frc2025/NavX2025.json"
   // phoenix5: "https://maven.ctr-electronics.com/release/com/ctre/phoenix/Phoenix5-frc2025-latest.json"
