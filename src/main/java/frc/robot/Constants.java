@@ -118,7 +118,7 @@ public final class Constants {
     public static final int RCB = 7;
   } 
   public static class pnumaticconstants{
-    public static final int center=1;
+    public static final int center=18;
   }
   // Vendor Dep URLS
   // nav-x: "https://storage.googleapis.com/frc2025/NavX2025.json"

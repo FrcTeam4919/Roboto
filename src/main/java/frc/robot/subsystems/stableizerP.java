@@ -2,12 +2,12 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
-
+import frc.robot.Robot;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 
 public class stableizerP extends SubsystemBase{
-    private DoubleSolenoid fourth = new DoubleSolenoid(PneumaticsModuleType.REVPH, 12, 13);
+    private DoubleSolenoid fourth = Robot.use.makeDoubleSolenoid( 12, 13);
    
   
   
