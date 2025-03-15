@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.motorConstants;  
 import edu.wpi.first.wpilibj.motorcontrol.PWMVictorSPX;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Transport;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.revrobotics.RelativeEncoder;
@@ -57,11 +58,13 @@ public void rotate_down(){
 @Override
    public void periodic() {
      // This method will be called once per scheduler run
+     SmartDashboard.putNumber("wrist motor",TiltR.getDistance());
    }
  
    @Override
    public void simulationPeriodic() {
      // This method will be called once per scheduler run during simulation
+    
    }
    public void Rotate(double degree){
     // specifide level finder for Rotate_roller (aka wrist).
