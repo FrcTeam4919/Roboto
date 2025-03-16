@@ -85,9 +85,9 @@ public final class Constants {
   public static class ControlSystem {
     // Driving motor CAN IDs
     public static final int kLeftFrontDrive = 12;
-    public static final int kLeftBackDrive = 15;
+    public static final int kLeftBackDrive = 17;
     public static final int kRightFrontDrive = 3;
-    public static final int kRightBackDrive = 0;
+    public static final int kRightBackDrive = 2;
     // Turning motors
     public static final int kLeftFrontTurn = 8;
     public static final int kLeftBackTurn = 11;
@@ -102,11 +102,11 @@ public final class Constants {
 
   public static class motorConstants{
     // motors for subsystems CAN IDs
-    public static final int CmotorL = 14;
+    public static final int CmotorL = 6;
     public static final int CmotorR = 1;
-    public static final int Emotor = 2;
-    public static final int InmotorL= 5;
-    public static final int InmotorR= 10;
+    public static final int Emotor = 20;
+    public static final int WristMotor= 5;
+    public static final int IntakeMotor= 10;
     // AM encoder DIO's
     public static final int ElvateA = 0;
     public static final int ElvateB = 1;
@@ -116,8 +116,10 @@ public final class Constants {
     public static final int LCB = 5;
     public static final int RCA = 6;
     public static final int RCB = 7;
+  } 
+  public static class pnumaticconstants{
+    public static final int center=18;
   }
-
   // Vendor Dep URLS
   // nav-x: "https://storage.googleapis.com/frc2025/NavX2025.json"
   // phoenix5: "https://maven.ctr-electronics.com/release/com/ctre/phoenix/Phoenix5-frc2025-latest.json"

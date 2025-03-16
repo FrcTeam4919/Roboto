@@ -7,6 +7,7 @@ package frc.robot;
 import javax.print.attribute.standard.MediaSize.NA;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -20,6 +21,8 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj.Joystick;
+import frc.robot.Transport;
+
 
 //commands
 import frc.robot.commands.EUp;
@@ -31,7 +34,7 @@ import frc.robot.commands.push_out;
 import frc.robot.commands.pull_in;
 import frc.robot.commands.rotate_down;
 import frc.robot.commands.rotate_up;
-
+import frc.robot.commands.stableizerP_togle;
 
 //subsystems
 import frc.robot.subsystems.DriveTrain;
@@ -40,7 +43,7 @@ import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.climbPistons;
 import frc.robot.subsystems.Rotate_rollor;
 import frc.robot.subsystems.Rollor;
-
+import frc.robot.subsystems.stableizerP;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.motorConstants;
 
@@ -52,6 +55,8 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
+  public static boolean Limit;
+  private static boolean togg;
   // The robot's subsystems and commands are defined here...
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   
@@ -68,9 +73,10 @@ public class RobotContainer {
   private final climbPistons m_CP = new climbPistons();
   private final Rollor m_Rollor = new Rollor();
   private final Rotate_rollor m_Rotate_rollor = new Rotate_rollor();
+  private final stableizerP m_Stab = new stableizerP();
   // joystick 
-  private final XboxController m_Controly = new XboxController(0);
-  private final CommandJoystick m_StickOfHope = new CommandJoystick(0);
+ // private final XboxController m_driverController = new XboxController(0);
+  //private final CommandJoystick m_StickOfHope = new CommandJoystick(0);
   private final Joystick m_ButtonBoard = new Joystick(1);
  // private final XboxController m_gamerTime = new XboxController(0);
   //commands
@@ -83,18 +89,25 @@ public class RobotContainer {
   private final rotate_down m_rotate_down = new rotate_down(m_Rotate_rollor);
 private final push_out m_push_out =new push_out(m_Rollor);
 private final pull_in m_pull_in = new pull_in(m_Rollor);
+private final stableizerP_togle m_stab = new stableizerP_togle(m_Stab);
   //buttons
-   private JoystickButton lock = new JoystickButton(m_ButtonBoard, 8);
-   private JoystickButton unlock = new JoystickButton(m_ButtonBoard, 9);
-   private JoystickButton Floor1 = new JoystickButton(m_ButtonBoard, 2);
-   private JoystickButton Floor2 = new JoystickButton(m_ButtonBoard, 3);
-   private JoystickButton Floor3 = new JoystickButton(m_ButtonBoard, 13);
-   private JoystickButton Floor4 = new JoystickButton(m_ButtonBoard, 12);
-   private JoystickButton ManUp = new JoystickButton(m_ButtonBoard, 5);
-   private JoystickButton ManDown = new JoystickButton(m_ButtonBoard, 6);
-   private JoystickButton Accention = new JoystickButton(m_ButtonBoard, 1);
+   //private JoystickButton lock = new JoystickButton(m_ButtonBoard, 8);
+   //private JoystickButton unlock = new JoystickButton(m_ButtonBoard, 9);
+   //elevator
+   private JoystickButton Floor1 = new JoystickButton(m_ButtonBoard, 8);
+   private JoystickButton Floor2 = new JoystickButton(m_ButtonBoard, 1);
+   private JoystickButton Floor3 = new JoystickButton(m_ButtonBoard, 2);
+   private JoystickButton Floor4 = new JoystickButton(m_ButtonBoard, 13);
+   private JoystickButton ManUp = new JoystickButton(m_ButtonBoard, 12);
+   private JoystickButton ManDown = new JoystickButton(m_ButtonBoard, 3);
+   //private JoystickButton Accention = new JoystickButton(m_ButtonBoard, 1);
+   //intake
   private JoystickButton up =new JoystickButton(m_ButtonBoard, 4);
   private JoystickButton down =new JoystickButton(m_ButtonBoard, 7);
+  private JoystickButton tiltu =new JoystickButton(m_ButtonBoard, 5);
+  private JoystickButton tiltm =new JoystickButton(m_ButtonBoard, 6);
+  private JoystickButton tiltd =new JoystickButton(m_ButtonBoard, 9);
+
 
   /** The conta iner for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -102,6 +115,7 @@ private final pull_in m_pull_in = new pull_in(m_Rollor);
     // Configure the trigger bindings
     configureBindings();
     //Configure driving default
+    /*
     m_robotDrive.setDefaultCommand(
       // Forward motion controls x speed (forward), sideways motion controls y speed (sideways).
         new RunCommand (  
@@ -112,8 +126,25 @@ private final pull_in m_pull_in = new pull_in(m_Rollor);
             DriveConstants.kTeleField), m_robotDrive)
                
         );
-   
+      // Configure the trigger bindings
+      configureBindings();*/
+      //Configure driving default
+      m_robotDrive.setDefaultCommand(
+        // Forward motion controls x speed (forward), sideways motion controls y speed (sideways).
+          new RunCommand (  
+            () -> m_robotDrive.drive(
+              -MathUtil.applyDeadband(m_driverController.getLeftY(), DriveConstants.kDriveDeadband),
+              -MathUtil.applyDeadband(-m_driverController.getLeftX(), DriveConstants.kDriveDeadband),
+              -MathUtil.applyDeadband(m_driverController.getRightX(), DriveConstants.kDriveDeadbandZ),
+              DriveConstants.kTeleField), m_robotDrive)
+                 
+          );
   }
+  
+ 
+ 
+   
+  
   
   /**
    * Use this method to define your trigger->command mappings. Triggers can be created via the
@@ -137,14 +168,21 @@ private final pull_in m_pull_in = new pull_in(m_Rollor);
     //if(right_Axis>0.5){
       
    // };
-   m_driverController.rightTrigger().onTrue(m_push_out);
+   m_driverController.y().onTrue(m_stab);
+   if (Limit==false){
+   m_driverController.a().onTrue(m_PTog);
+   }
+   else if(m_driverController.a().getAsBoolean()==true){
+       m_climb.Reset();
+   }
+   m_driverController.rightTrigger().whileTrue(m_push_out);
    if(m_driverController.rightTrigger().getAsBoolean()){
     m_driverController.setRumble(GenericHID.RumbleType.kRightRumble, 1);
    }
    else{
     m_driverController.setRumble(GenericHID.RumbleType.kRightRumble, 0);
    }
-   m_driverController.leftTrigger().onTrue(m_pull_in);
+   m_driverController.leftTrigger().whileTrue(m_pull_in);
    if(m_driverController.leftTrigger().getAsBoolean()){
     m_driverController.setRumble(GenericHID.RumbleType.kLeftRumble, 1);
    }
@@ -153,23 +191,69 @@ private final pull_in m_pull_in = new pull_in(m_Rollor);
    }
    up.whileTrue(m_rotate_up);
    down.whileTrue(m_rotate_down);
-    lock.whileTrue( m_Clamp);
-    unlock.whileTrue(m_LetGo);
+    m_driverController.x().whileTrue( m_Clamp);
+    m_driverController.b().whileTrue(m_LetGo);
     ManUp.whileTrue(m_EUp);
     ManDown.whileTrue(m_EDown);
-    Accention.onTrue(m_PTog);
+   // Accention.onTrue(m_PTog);
+   while(Limit==false){
+   if (tiltu.getAsBoolean()==true){
+    m_Rotate_rollor.Rotate(135);
+   }
+   else if (tiltm.getAsBoolean()==true){
+    m_Rotate_rollor.Rotate(90);
+   }
+   else if (tiltd.getAsBoolean()==true){
+    m_Rotate_rollor.Rotate(45);
+   } 
+  }
+  while(Limit==true){
+   if(tiltd.getAsBoolean()==true){
+    m_Rotate_rollor.Reset();
+  }
+  }
+   //call differant hights, if the limit is true then Floor1 is the only one enabled and changed to reset
+   while(Limit==false){
    if (Floor1.getAsBoolean()==true){
-    m_Elevator.Hight(2);
+    m_Elevator.Hight(0);
    }
-   if (Floor2.getAsBoolean()==true){
-    m_Elevator.Hight(4);
+   else if (Floor2.getAsBoolean()==true){
+    m_Elevator.Hight(3.7);
    }
-   if (Floor3.getAsBoolean()==true){
-    m_Elevator.Hight(6);
+   else if  (Floor3.getAsBoolean()==true){
+    m_Elevator.Hight(4.11);
    }
-   if (Floor4.getAsBoolean()==true){
-    m_Elevator.Hight(8);
+   else if  (Floor4.getAsBoolean()==true){
+    m_Elevator.Hight(18);
    }
+  }
+  while(Limit=true){
+ if (Floor1.getAsBoolean()==true){
+     m_Elevator.Reset();}
+ }
+   while(m_driverController.back().getAsBoolean()==true){
+     //revearsed ideas of true and false
+    if(togg==false){
+        if(Limit == false){
+          Limit=true;
+        }
+        else{
+          Limit = false;
+        }
+        togg=true;
+      }
+    }
+      while(m_driverController.back().getAsBoolean()==false){
+        togg=false;
+      }
+      
+       
+      
+   
+   // To save values for relitave encoders at the end of a match
+   if (DriverStation.isDisabled()){
+       Transport.Go();
+   } 
   }
 
   /**

@@ -5,6 +5,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import edu.wpi.first.wpilibj.motorcontrol.PWMVictorSPX;
 import edu.wpi.first.wpilibj.motorcontrol.Victor;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkClosedLoopController;
@@ -12,6 +14,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.wpilibj.Counter;
 import edu.wpi.first.wpilibj.Encoder;
+import frc.robot.Transport;
 import frc.robot.Constants.motorConstants;
 
 
@@ -20,7 +23,8 @@ public class Elevator extends SubsystemBase {
    //Counter placement = new Counter(1);
   public static Encoder place = new Encoder(motorConstants.ElvateA,motorConstants.ElvateB);
     double dia = 0.75;
-    double dis = (dia*3.14159/1024)/72;
+    double dis = (dia*Math.PI/1024)/72;
+    //10 times to top
    //Encoder Flor = new Encoder(0,1, false, Encoder.CANcoder.k2x );
     public Elevator(){
       //placement.setSemiPeriodMode(true);
@@ -28,22 +32,22 @@ public class Elevator extends SubsystemBase {
     }
 
      //normal up/down for custom hights
-     
+     //18.85
     public void up(){ 
-      if(place.getDistance() < 18.85){
-       m_liftMotor.set(1);
+      if(place.getDistance() < 18){
+       m_liftMotor.set(0.5);
       }
       else{
         stop();
       }
     }
     public void down(){
-      if(place.getDistance() > 0){
-    m_liftMotor.set(-1);
-    }
-    else{
-      stop();
-    }
+      //if(place.getDistance() > 0){
+    m_liftMotor.set(-0.5);
+    //}
+    //else{
+     // stop();
+   // }
     }
     // set elevator to called location, plan to call it directly from RobotContainer
    public void Hight(double level){
@@ -66,16 +70,40 @@ public class Elevator extends SubsystemBase {
     }
     }
    }
-   
+   public void LBup(){
+    m_liftMotor.set(0.5);
+   }
+   public void LBdown(){
+    m_liftMotor.set(-0.5);
+   }
    public void stop(){
     m_liftMotor.set(0);
    
     
    }
+   public void Reset(){
+    double goal = Transport.Lastsave(1);
+    double progress = goal+place.getDistance();
+    while(progress!=0){
+      progress=goal+place.getDistance();
+      if(progress>0){
+        LBdown();
+      }
+      else if(progress<0){
+        LBup();
+      }
+      else{
+        stop();
+        break;
+      }
+    }
+    stop();
+   }
 
    @Override
    public void periodic() {
      // This method will be called once per scheduler run
+     SmartDashboard.putNumber("Elevator motor",place.getDistance());
    }
  
    @Override

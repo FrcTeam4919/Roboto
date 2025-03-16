@@ -2,17 +2,17 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
-
+import frc.robot.Robot;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 
-public class rPiston extends SubsystemBase{
-    private DoubleSolenoid fourth = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 0, 1);
+public class stableizerP extends SubsystemBase{
+    private DoubleSolenoid fourth = Robot.use.makeDoubleSolenoid( 12, 13);
    
   
   
-public rPiston(){}
-//better than InnOut, toggle for this random piston that is here I guess.
+public stableizerP(){}
+//better than InnOut, toggle for the stablization piston.
 public void OutnIn(){
     fourth.toggle();
    
