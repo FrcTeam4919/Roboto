@@ -197,7 +197,7 @@ public class DriveTrain extends SubsystemBase {
     SmartDashboard.putNumber("Back Right Drive Speed", DriveVelBR());
 
     //Display Odometry IMU angle
-    SmartDashboard.putNumber("Odometry Angle", getOdometryAngle());
+    SmartDashboard.putNumber("IMU Angle", getIMUAngle());
     
     //Display Kinematics
     SmartDashboard.putNumber("Front Left Encoder Count", TurnCountFL());
@@ -218,7 +218,7 @@ public class DriveTrain extends SubsystemBase {
      SmartDashboard.putNumber("BR NEO Wheel Angle", wheelAngleNEOBR());
   }
 
-  public final double getOdometryAngle() {
+  public final double getIMUAngle() {
     //System.out.printf("Odo Angle Call %f\n", m_imu.getAngle());
     double iMUAngle = m_imu.getAngle();
     return iMUAngle;
