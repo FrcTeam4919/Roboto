@@ -6,6 +6,8 @@ package frc.robot;
 
 import javax.print.attribute.standard.MediaSize.NA;
 
+import edu.wpi.first.wpilibj.DataLogManager;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerPath;

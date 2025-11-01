@@ -12,6 +12,12 @@ import frc.robot.Constants.ControlSystem;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+import edu.wpi.first.util.datalog.BooleanLogEntry;
+import edu.wpi.first.util.datalog.DataLog;
+import edu.wpi.first.util.datalog.DoubleLogEntry;
+import edu.wpi.first.util.datalog.StringLogEntry;
+import edu.wpi.first.wpilibj.DataLogManager;
+
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -368,7 +374,10 @@ public class DriveTrain extends SubsystemBase {
 
   @Override
   public void simulationPeriodic() {
+
     // This method will be called once per scheduler run during simulation
+
+   // topRightAngle.append(m_frontRight.getAngle());
   }
   
 }
