@@ -16,6 +16,7 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.hardware.CANcoder;
+
 //import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -203,6 +204,14 @@ public class SwerveModule extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SwerveModuleState[] states = new SwerveModuleState[] {
+      new SwerveModuleState(),
+      new SwerveModuleState(),
+      new SwerveModuleState(),
+      new SwerveModuleState()
+    };
+    
+    //Logger.recordOutput("MyStates", states);
   }
 
   @Override
