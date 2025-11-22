@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj.DataLogManager;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.Odometry;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -35,7 +36,7 @@ import edu.wpi.first.wpilibj.Timer;
 
 
 public class DriveTrain extends SubsystemBase {
-  
+  private boolean MTOne = false;
   /** Creates a new Drive Train Subsystem. */
 
   private final Translation2d m_frontLeftLocation = new Translation2d(DriveConstants.WheelXdist, DriveConstants.WheelYdist);
@@ -145,6 +146,7 @@ public class DriveTrain extends SubsystemBase {
         //System.out.println("mt1 not null");
       if(mt1.tagCount == 1 && mt1.rawFiducials.length == 1)
       {
+            MTOne = true;
         if(mt1.rawFiducials[0].ambiguity > .7)
         {
           doRejectUpdate = true;
@@ -158,6 +160,7 @@ public class DriveTrain extends SubsystemBase {
       {
         //System.out.println("mt1 == 0");
         doRejectUpdate = true;
+        MTOne = false;
       }
 
       if(!doRejectUpdate)
@@ -191,6 +194,11 @@ public class DriveTrain extends SubsystemBase {
       }
     }    
     */
+    // if mt1 is more than 0 
+    SmartDashboard.putBoolean("MT1 = one", MTOne);
+
+    //SmartDashboard.putData("odomitrypos", m_odometry);
+
     // Put values to SmartDashboard 
     SmartDashboard.putNumber("Front Left Drive Speed", DriveVelFL());
     SmartDashboard.putNumber("Front Right Drive Speed", DriveVelFR());
