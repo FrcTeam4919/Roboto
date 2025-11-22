@@ -275,7 +275,18 @@ private final stableizerP_togle m_stab = new stableizerP_togle(m_Stab);
     // An example command will be run in autonomous
     public Command getAutonomousCommand() {
          //System.out.println("auto running");
-        return new DriveAuto(m_robotDrive);
+         try{
+          // Load the path you want to follow using its name in the GUI
+          PathPlannerPath path = PathPlannerPath.fromPathFile("Test");
+  
+          // Create a path following command using AutoBuilder. This will also trigger event markers.
+          return AutoBuilder.followPath(path);
+      } catch (Exception e) {
+          DriverStation.reportError("Big oops: " + e.getMessage(), e.getStackTrace());
+          return Commands.none();
+      }
+
+        //return new DriveAuto(m_robotDrive);
         /*return Commands.run(()-> m_robotDrive.drive(-15, 0, 0, false))
         .withTimeout(15)
         .finallyDo(()-> m_robotDrive.drive(0, 0, 0, false));*/
