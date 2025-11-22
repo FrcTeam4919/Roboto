@@ -75,8 +75,8 @@ public final class Constants {
  
     public static final double kChassisAngularOffset = 0;
 
-    public static final double kMaxSpeed = 4;
-    public static final double kMaxAngularSpeed = Math.PI;
+    public static final double kMaxSpeed = 20;
+    public static final double kMaxAngularSpeed = 50*Math.PI;
     public static final double kDriveDeadband = 0.05;
     public static final double kDriveDeadbandZ = 0.1;
     public static final boolean kTeleField = true;

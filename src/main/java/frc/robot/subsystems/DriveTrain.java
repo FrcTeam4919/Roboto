@@ -98,7 +98,7 @@ public class DriveTrain extends SubsystemBase {
   private final SwerveDrivePoseEstimator m_odometry =
     new SwerveDrivePoseEstimator(
       m_kinematics,
-      new Rotation2d(m_imu.getAngle()*Math.PI/180),
+      new Rotation2d(-m_imu.getAngle()*Math.PI/180),
       new SwerveModulePosition[] {
         m_frontLeft.getPosition(),
         m_frontRight.getPosition(),
@@ -117,7 +117,7 @@ public class DriveTrain extends SubsystemBase {
    // LimelightHelpers.LimelightResults results = LimelightHelpers.getLatestResults("limelight");
     // update odometry
     m_odometry.update(
-        Rotation2d.fromDegrees(m_imu.getAngle()),
+        Rotation2d.fromDegrees(-m_imu.getAngle()),
         new SwerveModulePosition[] {
             m_frontLeft.getPosition(),
             m_frontRight.getPosition(),
@@ -221,7 +221,7 @@ public class DriveTrain extends SubsystemBase {
 
   public final double getIMUAngle() {
     //System.out.printf("Odo Angle Call %f\n", m_imu.getAngle());
-    double iMUAngle = m_imu.getAngle();
+    double iMUAngle = -m_imu.getAngle()*Math.PI/180;
     return iMUAngle;
   } 
   
@@ -253,7 +253,7 @@ public class DriveTrain extends SubsystemBase {
 
     var swerveModuleStates = m_kinematics.toSwerveModuleStates(
         fieldRelative
-            ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered, Rotation2d.fromDegrees(m_imu.getAngle()))
+            ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered, Rotation2d.fromDegrees(-m_imu.getAngle()))
             : new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered));
     
     SwerveDriveKinematics.desaturateWheelSpeeds(
