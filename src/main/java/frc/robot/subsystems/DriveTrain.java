@@ -18,6 +18,7 @@ import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.util.datalog.StringLogEntry;
 import edu.wpi.first.wpilibj.DataLogManager;
 
+
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -97,7 +98,7 @@ public class DriveTrain extends SubsystemBase {
   private final SwerveDrivePoseEstimator m_odometry =
     new SwerveDrivePoseEstimator(
       m_kinematics,
-      new Rotation2d(m_imu.getAngle()),
+      new Rotation2d(m_imu.getAngle()*Math.PI/180),
       new SwerveModulePosition[] {
         m_frontLeft.getPosition(),
         m_frontRight.getPosition(),
