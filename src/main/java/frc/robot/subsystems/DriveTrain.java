@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.LimelightHelpers;
 import frc.robot.Constants.ControlSystem;
-
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import edu.wpi.first.util.datalog.BooleanLogEntry;
@@ -37,6 +37,7 @@ import edu.wpi.first.wpilibj.Timer;
 
 public class DriveTrain extends SubsystemBase {
   private boolean MTOne = false;
+  private final Field2d m_field = new Field2d();
   /** Creates a new Drive Train Subsystem. */
 
   private final Translation2d m_frontLeftLocation = new Translation2d(DriveConstants.WheelXdist, DriveConstants.WheelYdist);
@@ -196,8 +197,8 @@ public class DriveTrain extends SubsystemBase {
     */
     // if mt1 is more than 0 
     SmartDashboard.putBoolean("MT1 = one", MTOne);
-
-    //SmartDashboard.putData("odomitrypos", m_odometry);
+     
+    SmartDashboard.putData("odomitry pos", m_field);
 
     // Put values to SmartDashboard 
     SmartDashboard.putNumber("Front Left Drive Speed", DriveVelFL());
@@ -384,6 +385,8 @@ public class DriveTrain extends SubsystemBase {
   @Override
   public void simulationPeriodic() {
 
+    m_field.setRobotPose(m_odometry.getEstimatedPosition());
+    
     // This method will be called once per scheduler run during simulation
 
    // topRightAngle.append(m_frontRight.getAngle());

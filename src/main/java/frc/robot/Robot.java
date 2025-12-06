@@ -9,6 +9,8 @@ import edu.wpi.first.util.datalog.DoubleLogEntry;
 import edu.wpi.first.util.datalog.StringLogEntry;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Transport;
@@ -29,6 +31,8 @@ public class Robot extends TimedRobot {
  public DoubleLogEntry bottomRightAngle;
  public DoubleLogEntry bottomLeftAngle;
   
+
+
   StringLogEntry myStringLog;
   public Robot() {
     // Starts recording to data log
@@ -51,6 +55,8 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
+     
+     
   }
 
   /**
@@ -124,5 +130,8 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically whilst in simulation. */
   @Override
-  public void simulationPeriodic() {}
+  public void simulationPeriodic() {
+   
+
+  }
 }
