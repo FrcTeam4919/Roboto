@@ -37,6 +37,7 @@ import edu.wpi.first.wpilibj.Timer;
 
 public class DriveTrain extends SubsystemBase {
   private boolean MTOne = false;
+  
   private final Field2d m_field = new Field2d();
   /** Creates a new Drive Train Subsystem. */
 
@@ -143,6 +144,7 @@ public class DriveTrain extends SubsystemBase {
     //if(useMegaTag2 == false)
         //System.out.println("Limelight code run");
       LimelightHelpers.PoseEstimate mt1 = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
+       Double[] mt1Pos =  {(mt1.pose.getX()),(mt1.pose.getY()),(mt1.pose.getRotation().getDegrees())};
       if(mt1 != null){
         //System.out.println("mt1 not null");
       if(mt1.tagCount == 1 && mt1.rawFiducials.length == 1)
@@ -197,9 +199,10 @@ public class DriveTrain extends SubsystemBase {
     */
     // if mt1 is more than 0 
     SmartDashboard.putBoolean("MT1 = one", MTOne);
-     
+     // smartdash pos
     SmartDashboard.putData("odomitry pos", m_field);
-
+    
+    SmartDashboard.putNumberArray("mti Pose", mt1Pos);
     // Put values to SmartDashboard 
     SmartDashboard.putNumber("Front Left Drive Speed", DriveVelFL());
     SmartDashboard.putNumber("Front Right Drive Speed", DriveVelFR());
