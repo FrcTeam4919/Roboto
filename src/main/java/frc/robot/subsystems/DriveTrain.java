@@ -9,11 +9,19 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.LimelightHelpers;
 import frc.robot.Constants.ControlSystem;
-
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+import edu.wpi.first.util.datalog.BooleanLogEntry;
+import edu.wpi.first.util.datalog.DataLog;
+import edu.wpi.first.util.datalog.DoubleLogEntry;
+import edu.wpi.first.util.datalog.StringLogEntry;
+import edu.wpi.first.wpilibj.DataLogManager;
+
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.Odometry;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -28,7 +36,9 @@ import edu.wpi.first.wpilibj.Timer;
 
 
 public class DriveTrain extends SubsystemBase {
+  private boolean MTOne = false;
   
+  private final Field2d m_field = new Field2d();
   /** Creates a new Drive Train Subsystem. */
 
   private final Translation2d m_frontLeftLocation = new Translation2d(DriveConstants.WheelXdist, DriveConstants.WheelYdist);
@@ -91,7 +101,7 @@ public class DriveTrain extends SubsystemBase {
   private final SwerveDrivePoseEstimator m_odometry =
     new SwerveDrivePoseEstimator(
       m_kinematics,
-      new Rotation2d(m_imu.getAngle()),
+      new Rotation2d(-m_imu.getAngle()*Math.PI/180),
       new SwerveModulePosition[] {
         m_frontLeft.getPosition(),
         m_frontRight.getPosition(),
@@ -110,7 +120,7 @@ public class DriveTrain extends SubsystemBase {
    // LimelightHelpers.LimelightResults results = LimelightHelpers.getLatestResults("limelight");
     // update odometry
     m_odometry.update(
-        Rotation2d.fromDegrees(m_imu.getAngle()),
+        Rotation2d.fromDegrees(-m_imu.getAngle()),
         new SwerveModulePosition[] {
             m_frontLeft.getPosition(),
             m_frontRight.getPosition(),
@@ -134,10 +144,12 @@ public class DriveTrain extends SubsystemBase {
     //if(useMegaTag2 == false)
         //System.out.println("Limelight code run");
       LimelightHelpers.PoseEstimate mt1 = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
+       Double[] mt1Pos =  {(mt1.pose.getX()),(mt1.pose.getY()),(mt1.pose.getRotation().getDegrees())};
       if(mt1 != null){
         //System.out.println("mt1 not null");
       if(mt1.tagCount == 1 && mt1.rawFiducials.length == 1)
       {
+            MTOne = true;
         if(mt1.rawFiducials[0].ambiguity > .7)
         {
           doRejectUpdate = true;
@@ -151,6 +163,7 @@ public class DriveTrain extends SubsystemBase {
       {
         //System.out.println("mt1 == 0");
         doRejectUpdate = true;
+        MTOne = false;
       }
 
       if(!doRejectUpdate)
@@ -184,6 +197,12 @@ public class DriveTrain extends SubsystemBase {
       }
     }    
     */
+    // if mt1 is more than 0 
+    SmartDashboard.putBoolean("MT1 = one", MTOne);
+     // smartdash pos
+    SmartDashboard.putData("odomitry pos", m_field);
+    
+    SmartDashboard.putNumberArray("mti Pose", mt1Pos);
     // Put values to SmartDashboard 
     SmartDashboard.putNumber("Front Left Drive Speed", DriveVelFL());
     SmartDashboard.putNumber("Front Right Drive Speed", DriveVelFR());
@@ -191,7 +210,7 @@ public class DriveTrain extends SubsystemBase {
     SmartDashboard.putNumber("Back Right Drive Speed", DriveVelBR());
 
     //Display Odometry IMU angle
-    SmartDashboard.putNumber("Odometry Angle", getOdometryAngle());
+    SmartDashboard.putNumber("IMU Angle", getIMUAngle());
     
     //Display Kinematics
     SmartDashboard.putNumber("Front Left Encoder Count", TurnCountFL());
@@ -212,9 +231,9 @@ public class DriveTrain extends SubsystemBase {
      SmartDashboard.putNumber("BR NEO Wheel Angle", wheelAngleNEOBR());
   }
 
-  public final double getOdometryAngle() {
+  public final double getIMUAngle() {
     //System.out.printf("Odo Angle Call %f\n", m_imu.getAngle());
-    double iMUAngle = m_imu.getAngle();
+    double iMUAngle = -m_imu.getAngle()*Math.PI/180;
     return iMUAngle;
   } 
   
@@ -246,7 +265,7 @@ public class DriveTrain extends SubsystemBase {
 
     var swerveModuleStates = m_kinematics.toSwerveModuleStates(
         fieldRelative
-            ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered, Rotation2d.fromDegrees(m_imu.getAngle()))
+            ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered, Rotation2d.fromDegrees(-m_imu.getAngle()))
             : new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered));
     
     SwerveDriveKinematics.desaturateWheelSpeeds(
@@ -368,7 +387,12 @@ public class DriveTrain extends SubsystemBase {
 
   @Override
   public void simulationPeriodic() {
+
+    m_field.setRobotPose(m_odometry.getEstimatedPosition());
+    
     // This method will be called once per scheduler run during simulation
+
+   // topRightAngle.append(m_frontRight.getAngle());
   }
   
 }

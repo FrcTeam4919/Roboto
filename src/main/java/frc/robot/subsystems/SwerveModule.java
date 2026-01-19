@@ -125,8 +125,11 @@ public class SwerveModule extends SubsystemBase {
     correctedDesiredState.speedMetersPerSecond = desiredState.speedMetersPerSecond;
     correctedDesiredState.angle = desiredState.angle;//.plus(Rotation2d.fromDegrees(m_moduleEncoderAngularOffset));
     // Optimize the reference state to avoid spinning further than 90 degrees.
+
+    
     SwerveModuleState optimizedDesiredState = SwerveModuleState.optimize(correctedDesiredState,
         getAngle());
+       // optimizedDesiredState.cosineScale(getAngle());
         //new Rotation2d(m_CANcoder.getPosition().getValue()));
 
    
