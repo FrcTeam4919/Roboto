@@ -91,13 +91,13 @@ public class SwerveModule extends SubsystemBase {
 
     m_turnEncoder = m_turningMotor.getEncoder();
     m_turnClosedLoopController = m_turningMotor.getClosedLoopController();
-    m_CANcoder = new CANcoder(turningEncoderChannel);
-    //m_CANcoder.configure.setInverted();
-    m_moduleEncoderAngularOffset = moduleEncoderAngularOffset*Math.PI*2;  // in radians    *360;
+    m_CANcoder = new CANcoder(turningEncoderChannel);  // in radians    *360;
 
     // NOTE: All turning math must be in RADIANS!!!
 
     //m_chassisAngularOffset = chassisAngularOffset;
+    //m_CANcoder.configure.setInverted();
+    m_moduleEncoderAngularOffset = moduleEncoderAngularOffset*Math.PI*2;
     m_desiredState.angle = getAngle();//new Rotation2d(m_CANcoder.getPosition().getValue());
     //m_driveEncoder.setPosition(0);
     resetEncoders();
